@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arca &mdash; Hospitality Lead Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"/>
+<style>
+:root {
+  --ink:      #0e0e0e;
+  --ink-2:    #2c2c2c;
+  --ink-3:    #6b6b6b;
+  --ink-4:    #a8a8a8;
+  --surface:  #f9f7f4;
+  --card:     #ffffff;
+  --border:   #e8e4de;
+  --border-2: #d4cec5;
+  --gold:     #b8965a;
+  --gold-lt:  #f5eedf;
+  --green:    #2d6a4f;
+  --green-lt: #d8ede5;
+  --red:      #9b2226;
+  --red-lt:   #f7dede;
+  --blue:     #1d4e89;
+  --blue-lt:  #dce8f5;
+  --amber:    #7d4e00;
+  --amber-lt: #fdf0d5;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow:    0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.05);
+  --radius:    10px;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  'DM Sans', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 15px; -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--surface);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  width: 30px; height: 30px;
+  background: var(--ink);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.brand-mark i { color: var(--gold); font-size: 15px; }
+
+.brand-name {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--ink);
+}
+
+.brand-sep { width: 1px; height: 18px; background: var(--border-2); }
+
+.brand-sub {
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+
+.notif-btn {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-2);
+  position: relative;
+  transition: background .15s;
+}
+.notif-btn:hover { background: var(--surface); }
+.notif-btn i { font-size: 16px; }
+.notif-badge {
+  position: absolute; top: 5px; right: 5px;
+  width: 7px; height: 7px;
+  background: var(--gold);
+  border-radius: 50%;
+  border: 1.5px solid white;
+  display: none;
+}
+.notif-badge.show { display: block; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 0 16px; height: 34px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  border: none;
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--ink);
+  color: white;
+}
+.btn-primary:hover { background: #222; }
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-2);
+  color: var(--ink-2);
+}
+.btn-outline:hover { border-color: var(--ink); }
+.btn i { font-size: 14px; }
+
+/* ── LAYOUT ── */
+.layout {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  position: sticky;
+  top: 58px;
+  height: calc(100vh - 58px);
+  overflow-y: auto;
+}
+
+.nav-section-label {
+  font-size: .66rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding: 12px 20px 6px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  border-radius: 0;
+  font-size: .84rem;
+  color: var(--ink-3);
+  transition: all .12s;
+  border-left: 2px solid transparent;
+}
+.nav-item i { font-size: 16px; }
+.nav-item:hover { color: var(--ink); background: var(--surface); }
+.nav-item.active {
+  color: var(--ink);
+  background: var(--gold-lt);
+  border-left-color: var(--gold);
+  font-weight: 500;
+}
+
+.nav-divider {
+  height: 1px; background: var(--border);
+  margin: 10px 0;
+}
+
+.stage-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  margin-left: auto; flex-shrink: 0;
+}
+
+.main {
+  flex: 1;
+  padding: 28px 28px 40px;
+  min-width: 0;
+  max-width: 1200px;
+}
+
+/* ── PAGES ── */
+.page { display: none; animation: fadeIn .2s ease; }
+.page.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 24px; gap: 16px;
+}
+.page-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.page-sub {
+  font-size: .8rem;
+  color: var(--ink-3);
+  margin-top: 3px;
+}
+
+/* ── STATS ROW ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+.stat-label {
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-family: var(--font-serif);
+  font-size: 2.1rem;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+}
+.stat-sub {
+  font-size: .75rem;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+/* ── FILTERS ── */
+.filters-bar {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.search-wrap {
+  position: relative; flex: 1; min-width: 180px; max-width: 300px;
+}
+.search-wrap i {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  color: var(--ink-4); font-size: 15px; pointer-events: none;
+}
+.search-input {
+  width: 100%; height: 34px;
+  padding: 0 12px 0 32px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  font-family: var(--font-sans);
+  font-size: .83rem;
+  color: var(--ink);
+  outline: none;
+  transition: border .15s;
+}
+.search-input:focus { border-color: var(--gold); }
+
+.filter-select {
+  height: 34px; padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  font-family: var(--font-sans);
+  font-size: .83rem;
+  color: var(--ink-2);
+  outline: none;
+  cursor: pointer;
+}
+
+/* ── LEADS TABLE ── */
+.table-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+table {
+  width: 100%; border-collapse: collapse;
+}
+thead th {
+  background: var(--surface);
+  padding: 10px 16px;
+  text-align: left;
+  font-size: .7rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .1s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface); }
+tbody td {
+  padding: 12px 16px;
+  font-size: .84rem;
+  color: var(--ink-2);
+  vertical-align: middle;
+}
+.td-name { font-weight: 500; color: var(--ink); }
+.td-name .sub { font-size: .76rem; color: var(--ink-3); font-weight: 400; margin-top: 1px; }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 9px; border-radius: 20px;
+  font-size: .72rem; font-weight: 500; letter-spacing: .03em;
+  white-space: nowrap;
+}
+.badge-new      { background: var(--blue-lt);  color: var(--blue);  }
+.badge-replied  { background: var(--amber-lt); color: var(--amber); }
+.badge-qualified{ background: var(--gold-lt);  color: #7a5c1e;      }
+.badge-quoted   { background: #ece8f8;          color: #4a2d8c;      }
+.badge-won      { background: var(--green-lt); color: var(--green); }
+.badge-lost     { background: var(--red-lt);   color: var(--red);   }
+
+.source-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: .76rem; color: var(--ink-3);
+}
+.source-badge i { font-size: 13px; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 60px 20px;
+  color: var(--ink-4);
+}
+.empty-state i { font-size: 36px; display: block; margin-bottom: 12px; color: var(--border-2); }
+.empty-state p { font-size: .9rem; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(2px);
+  z-index: 200;
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--card);
+  border-radius: 14px;
+  width: 100%; max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn .2s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-header {
+  padding: 22px 24px 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 400;
+}
+.modal-close {
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-3);
+  font-size: 16px;
+  transition: all .12s;
+}
+.modal-close:hover { background: var(--surface); color: var(--ink); }
+
+.modal-body { padding: 20px 24px 24px; }
+
+/* ── FORM ── */
+.form-grid { display: grid; gap: 14px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label {
+  font-size: .73rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.form-input, .form-select, .form-textarea {
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: .87rem;
+  color: var(--ink);
+  background: var(--card);
+  outline: none;
+  transition: border .15s;
+  width: 100%;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184,150,90,.1);
+}
+.form-textarea { resize: vertical; min-height: 80px; }
+
+.form-actions {
+  display: flex; justify-content: flex-end; gap: 10px;
+  margin-top: 20px; padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── DETAIL PANEL ── */
+.detail-modal { max-width: 700px; }
+
+.detail-meta {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin-bottom: 20px;
+}
+.detail-item { }
+.detail-item-label {
+  font-size: .7rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 3px;
+}
+.detail-item-value {
+  font-size: .88rem; color: var(--ink-2);
+}
+
+.section-title {
+  font-size: .75rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  font-weight: 500;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── MESSAGES ── */
+.messages-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 200px; overflow-y: auto; }
+
+.msg-bubble {
+  max-width: 90%;
+  padding: 9px 13px;
+  border-radius: 10px;
+  font-size: .84rem;
+  line-height: 1.5;
+}
+.msg-bubble.inbound {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  align-self: flex-start;
+}
+.msg-bubble.outbound {
+  background: var(--ink);
+  color: white;
+  align-self: flex-end;
+}
+.msg-meta { font-size: .7rem; color: var(--ink-4); margin-top: 3px; }
+.msg-bubble.outbound .msg-meta { color: rgba(255,255,255,.5); }
+
+/* ── STAGE PROGRESS ── */
+.stage-track {
+  display: flex; align-items: center;
+  gap: 0;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+.stage-step {
+  display: flex; flex-direction: column; align-items: center;
+  flex: 1; min-width: 60px; position: relative;
+  cursor: pointer;
+}
+.stage-step::after {
+  content: '';
+  position: absolute; top: 14px; left: 50%; width: 100%; height: 2px;
+  background: var(--border);
+  z-index: 0;
+}
+.stage-step:last-child::after { display: none; }
+.stage-node {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-4);
+  position: relative; z-index: 1;
+  transition: all .2s;
+}
+.stage-step.done .stage-node {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+.stage-step.current .stage-node {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: white;
+  box-shadow: 0 0 0 3px var(--gold-lt);
+}
+.stage-step-label {
+  font-size: .65rem; margin-top: 5px;
+  color: var(--ink-4); white-space: nowrap;
+  text-align: center;
+}
+.stage-step.current .stage-step-label { color: var(--gold); font-weight: 500; }
+.stage-step.done .stage-step-label { color: var(--green); }
+
+/* ── CHECKIN ── */
+.checkin-steps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.checkin-step {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  font-size: .78rem;
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--card);
+  color: var(--ink-3);
+}
+.checkin-step.done {
+  background: var(--green-lt);
+  border-color: var(--green);
+  color: var(--green);
+}
+.checkin-step i { font-size: 13px; }
+
+/* ── NOTIFICATIONS PANEL ── */
+.notif-panel {
+  position: absolute; top: 50px; right: 20px;
+  width: 320px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  z-index: 150;
+  display: none;
+  overflow: hidden;
+}
+.notif-panel.open { display: block; }
+.notif-panel-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.notif-panel-title {
+  font-size: .8rem; font-weight: 500;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.notif-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: .82rem;
+  cursor: pointer;
+  transition: background .1s;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: var(--surface); }
+.notif-item.unread { background: var(--gold-lt); }
+.notif-item .notif-time { font-size: .72rem; color: var(--ink-4); margin-top: 3px; }
+.notif-empty { padding: 20px; text-align: center; color: var(--ink-4); font-size: .84rem; }
+
+/* ── WIN/LOSS RECORD ── */
+.wl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.wl-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.wl-card:hover { border-color: var(--gold); box-shadow: var(--shadow-sm); }
+.wl-card.selected-won  { border-color: var(--green); background: var(--green-lt); }
+.wl-card.selected-lost { border-color: var(--red);   background: var(--red-lt);   }
+.wl-card-title {
+  font-size: .84rem; font-weight: 500; color: var(--ink);
+  margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+}
+.wl-card-title i { font-size: 14px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 780px) {
+  .sidebar {
+    position: fixed; left: -220px; top: 58px; z-index: 90;
+    height: calc(100vh - 58px);
+    transition: left .25s ease;
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar.open { left: 0; }
+  .main { padding: 18px 14px 40px; }
+  .form-row { grid-template-columns: 1fr; }
+  .detail-meta { grid-template-columns: 1fr; }
+  .wl-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  table { font-size: .8rem; }
+  thead th:nth-child(n+4), tbody td:nth-child(n+4) { display: none; }
+
+  .page-header { flex-direction: column; align-items: flex-start; }
+  .hamburger { display: flex !important; }
+}
+
+.hamburger {
+  display: none;
+  width: 34px; height: 34px;
+  align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--ink-2);
+  font-size: 18px;
+}
+
+/* ── TOAST ── */
+.toast-container {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: 300; display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  background: var(--ink);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: .84rem;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: var(--shadow-lg);
+  animation: slideIn .25s ease;
+  max-width: 320px;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.toast.success i { color: #6fcf97; }
+.toast.error i { color: #eb5757; }
+.toast i { font-size: 16px; }
+
+/* ── PIPELINE PAGE ── */
+.pipeline-board {
+  display: flex; gap: 14px; overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.pipeline-col {
+  flex-shrink: 0;
+  width: 230px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.pipeline-col-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pipeline-col-title { font-size: .8rem; font-weight: 500; }
+.pipeline-col-count {
+  font-size: .72rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 7px; height: 18px;
+  display: flex; align-items: center;
+  color: var(--ink-4);
+}
+.pipeline-cards { padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 80px; }
+.pipeline-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.pipeline-card:hover { box-shadow: var(--shadow-sm); border-color: var(--gold); }
+.pipeline-card-name { font-size: .84rem; font-weight: 500; color: var(--ink); }
+.pipeline-card-meta { font-size: .74rem; color: var(--ink-4); margin-top: 3px; }
+
+/* ── LOADING ── */
+.loading-row td { text-align: center; padding: 40px; color: var(--ink-4); font-size: .85rem; }
+.spinner {
+  width: 20px; height: 20px; border: 2px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  display: inline-block; vertical-align: middle; margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <i class="ri-menu-line"></i>
+    </button>
+    <div class="brand">
+      <div class="brand-mark"><i class="ri-hotel-line"></i></div>
+      <span class="brand-name">Arca</span>
+      <span class="brand-sep"></span>
+      <span class="brand-sub">Hospitality CRM</span>
+    </div>
+  </div>
+  <div class="topbar-right" style="position:relative;">
+    <button class="notif-btn" id="notifBtn" title="Notifications">
+      <i class="ri-notification-3-line"></i>
+      <span class="notif-badge" id="notifBadge"></span>
+    </button>
+    <button class="btn btn-primary" id="btnNewLead">
+      <i class="ri-add-line"></i> New Lead
+    </button>
+    <!-- Notifications Panel -->
+    <div class="notif-panel" id="notifPanel">
+      <div class="notif-panel-header">
+        <span class="notif-panel-title">Notifications</span>
+        <button class="btn btn-outline" style="height:26px;padding:0 10px;font-size:.73rem;" onclick="markNotifsRead()">Mark read</button>
+      </div>
+      <div id="notifList"><div class="notif-empty">No notifications</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <span class="nav-section-label">Overview</span>
+    <div class="nav-item active" data-page="dashboard"><i class="ri-dashboard-3-line"></i> Dashboard</div>
+    <div class="nav-item" data-page="leads"><i class="ri-contacts-book-2-line"></i> All Leads</div>
+    <div class="nav-item" data-page="pipeline"><i class="ri-kanban-view"></i> Pipeline</div>
+
+    <span class="nav-section-label" style="margin-top:6px;">Stages</span>
+    <div class="nav-item stage-filter" data-stage="New"><i class="ri-mail-unread-line"></i> New
+      <span class="stage-dot" style="background:#1d4e89;"></span>
+    </div>
+    <div class="nav-item stage-filter" data-stage="Replied"><i class="ri-reply-line"></i> Replied
+      <span class="stage-dot" style="background:#7d4e00;"></span>
+    </div>
+    <div class="nav-item stage-filter" data-stage="Qualified"><i class="ri-medal-line"></i> Qualified
+      <span class="stage-dot" style="background:#b8965a;"></span>
+    </div>
+    <div class="nav-item stage-filter" data-stage="Quoted"><i class="ri-price-tag-3-line"></i> Quoted
+      <span class="stage-dot" style="background:#4a2d8c;"></span>
+    </div>
+    <div class="nav-item stage-filter" data-stage="Won"><i class="ri-checkbox-circle-line"></i> Won
+      <span class="stage-dot" style="background:#2d6a4f;"></span>
+    </div>
+    <div class="nav-item stage-filter" data-stage="Lost"><i class="ri-close-circle-line"></i> Lost
+      <span class="stage-dot" style="background:#9b2226;"></span>
+    </div>
+
+    <div class="nav-divider"></div>
+    <span class="nav-section-label">Tools</span>
+    <div class="nav-item" data-page="checkin"><i class="ri-id-card-line"></i> Guest Check-In</div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- DASHBOARD PAGE -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Good day.</h1>
+          <p class="page-sub" id="dashDate"></p>
+        </div>
+        <button class="btn btn-outline" onclick="loadDashboard()"><i class="ri-refresh-line"></i> Refresh</button>
+      </div>
+
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card"><div class="stat-label">Total Leads</div><div class="stat-value" id="stat-total">—</div></div>
+        <div class="stat-card"><div class="stat-label">Won</div><div class="stat-value" id="stat-won">—</div></div>
+        <div class="stat-card"><div class="stat-label">Lost</div><div class="stat-value" id="stat-lost">—</div></div>
+        <div class="stat-card"><div class="stat-label">Conversion</div><div class="stat-value" id="stat-conv">—</div><div class="stat-sub">Win rate</div></div>
+        <div class="stat-card"><div class="stat-label">New Today</div><div class="stat-value" id="stat-new">—</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px;" class="dash-cards">
+        <div class="table-wrap" style="padding:16px 18px;">
+          <div class="section-title" style="margin-bottom:10px;">Leads by Stage</div>
+          <div id="stageBreakdown"></div>
+        </div>
+        <div class="table-wrap" style="padding:16px 18px;">
+          <div class="section-title" style="margin-bottom:10px;">Leads by Source</div>
+          <div id="sourceBreakdown"></div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:.8rem;font-weight:500;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">Recent Activity</span>
+          <button class="btn btn-outline" style="height:28px;padding:0 12px;font-size:.76rem;" onclick="navigate('leads')">View all</button>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Source</th><th>Stage</th><th>Updated</th>
+          </tr></thead>
+          <tbody id="recentLeads"><tr class="loading-row"><td colspan="4"><span class="spinner"></span>Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- LEADS PAGE -->
+    <section class="page" id="page-leads">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">All Leads</h1>
+          <p class="page-sub" id="leadsCount"></p>
+        </div>
+        <button class="btn btn-primary" onclick="openNewLeadModal()"><i class="ri-add-line"></i> New Lead</button>
+      </div>
+      <div class="filters-bar">
+        <div class="search-wrap">
+          <i class="ri-search-2-line"></i>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search by name, email..."/>
+        </div>
+        <select class="filter-select" id="stageFilter"><option value="">All Stages</option></select>
+        <select class="filter-select" id="sourceFilter"><option value="">All Sources</option></select>
+        <button class="btn btn-outline" onclick="loadLeads()"><i class="ri-refresh-line"></i></button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Source</th><th>Stage</th><th>Event Date</th><th>Guests</th><th>Updated</th>
+          </tr></thead>
+          <tbody id="leadsTableBody"><tr class="loading-row"><td colspan="6"><span class="spinner"></span>Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PIPELINE PAGE -->
+    <section class="page" id="page-pipeline">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Pipeline</h1>
+          <p class="page-sub">Visual overview of all active leads</p>
+        </div>
+        <button class="btn btn-outline" onclick="loadPipeline()"><i class="ri-refresh-line"></i> Refresh</button>
+      </div>
+      <div class="pipeline-board" id="pipelineBoard"></div>
+    </section>
+
+    <!-- CHECKIN PAGE -->
+    <section class="page" id="page-checkin">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Guest Check-In</h1>
+          <p class="page-sub">Pre-arrival ID &amp; admin tracking</p>
+        </div>
+      </div>
+      <div class="filters-bar">
+        <div class="search-wrap">
+          <i class="ri-search-2-line"></i>
+          <input type="text" class="search-input" id="checkinSearch" placeholder="Search guests..."/>
+        </div>
+        <select class="filter-select" id="checkinStageFilter"><option value="">All Stages</option></select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Guest</th><th>Event Date</th><th>Check-In Status</th><th>Source</th><th>Actions</th></tr></thead>
+          <tbody id="checkinTable"><tr class="loading-row"><td colspan="5"><span class="spinner"></span>Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ── MODAL: NEW / EDIT LEAD ── -->
+<div class="modal-overlay" id="leadModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="leadModalTitle">New Lead</span>
+      <button class="modal-close" onclick="closeModal('leadModal')"><i class="ri-close-line"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-input" id="f-name" placeholder="Guest or contact name"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Source</label>
+            <select class="form-select" id="f-source"></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="f-email" placeholder="email@example.com"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone / WhatsApp</label>
+            <input type="text" class="form-input" id="f-phone" placeholder="+1 555 000 0000"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Event Date</label>
+            <input type="date" class="form-input" id="f-eventdate"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Guest Count</label>
+            <input type="number" class="form-input" id="f-guestcount" placeholder="e.g. 40"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Initial Message</label>
+          <textarea class="form-textarea" id="f-message" placeholder="Paste the inquiry message here..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Internal Notes</label>
+          <textarea class="form-textarea" id="f-notes" placeholder="Private team notes..." style="min-height:60px;"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-outline" onclick="closeModal('leadModal')">Cancel</button>
+        <button class="btn btn-primary" id="leadModalSave" onclick="saveLead()"><i class="ri-save-line"></i> Save Lead</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: LEAD DETAIL ── -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal detail-modal">
+    <div class="modal-header">
+      <span class="modal-title" id="detailName">Lead Detail</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="btn btn-outline" style="height:30px;padding:0 12px;font-size:.78rem;" id="btnEditLead"><i class="ri-edit-line"></i> Edit</button>
+        <button class="modal-close" onclick="closeModal('detailModal')"><i class="ri-close-line"></i></button>
+      </div>
+    </div>
+    <div class="modal-body" id="detailBody">
+      <!-- Filled dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST CONTAINER ── -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+const API = '';
+let META = { stages: [], sources: [], lost_reasons: [], won_reasons: [], checkin_stages: [] };
+let currentLeadId = null;
+let editingLeadId = null;
+let notifPanelOpen = false;
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+
+async function init() {
+  document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-GB', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+
+  try {
+    const res = await fetch(`${API}/api/meta`);
+    META = await res.json();
+    populateFilters();
+  } catch(e) {
+    // offline demo mode — seed meta
+    META = {
+      stages: ['New','Replied','Qualified','Quoted','Won','Lost'],
+      sources: ['Email','Instagram','WhatsApp','Platform Forward','Direct Message','Other'],
+      lost_reasons: ['Budget','Booked Elsewhere','No Reply','Dates Unavailable','Other'],
+      won_reasons: ['Value','Location','Referral','Reviews','Other'],
+      checkin_stages: ['ID Requested','ID Received','Approved','Ready for Arrival'],
+    };
+    populateFilters();
+  }
+
+  loadDashboard();
+  loadNotifications();
+
+  // Navigation
+  document.querySelectorAll('[data-page]').forEach(el => {
+    el.addEventListener('click', () => navigate(el.dataset.page));
+  });
+  document.querySelectorAll('.stage-filter').forEach(el => {
+    el.addEventListener('click', () => {
+      navigate('leads');
+      setTimeout(() => {
+        document.getElementById('stageFilter').value = el.dataset.stage;
+        loadLeads();
+      }, 80);
+    });
+  });
+
+  document.getElementById('btnNewLead').onclick = openNewLeadModal;
+  document.getElementById('searchInput').addEventListener('input', debounce(loadLeads, 300));
+  document.getElementById('stageFilter').addEventListener('change', loadLeads);
+  document.getElementById('sourceFilter').addEventListener('change', loadLeads);
+  document.getElementById('checkinSearch').addEventListener('input', debounce(loadCheckin, 300));
+  document.getElementById('checkinStageFilter').addEventListener('change', loadCheckin);
+
+  document.getElementById('notifBtn').onclick = toggleNotifPanel;
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#notifBtn') && !e.target.closest('#notifPanel')) {
+      document.getElementById('notifPanel').classList.remove('open');
+      notifPanelOpen = false;
+    }
+  });
+
+  document.getElementById('hamburger').onclick = () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  };
+
+  // Close modal on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(o => {
+    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+  });
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const el = document.getElementById(`page-${page}`);
+  if (el) el.classList.add('active');
+
+  const navEl = document.querySelector(`[data-page="${page}"]`);
+  if (navEl) navEl.classList.add('active');
+
+  document.getElementById('sidebar').classList.remove('open');
+
+  if (page === 'dashboard') loadDashboard();
+  if (page === 'leads') loadLeads();
+  if (page === 'pipeline') loadPipeline();
+  if (page === 'checkin') loadCheckin();
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────────────
+
+function populateFilters() {
+  const sf = document.getElementById('stageFilter');
+  const srcf = document.getElementById('sourceFilter');
+  const csf = document.getElementById('checkinStageFilter');
+  const fsrc = document.getElementById('f-source');
+
+  META.stages.forEach(s => {
+    sf.innerHTML += `<option value="${s}">${s}</option>`;
+  });
+  META.sources.forEach(s => {
+    srcf.innerHTML += `<option value="${s}">${s}</option>`;
+    fsrc.innerHTML += `<option value="${s}">${s}</option>`;
+  });
+  META.checkin_stages.forEach(s => {
+    csf.innerHTML += `<option value="${s}">${s}</option>`;
+  });
+}
+
+// ── API HELPERS ───────────────────────────────────────────────────────────
+
+async function apiFetch(url, opts = {}) {
+  try {
+    const res = await fetch(API + url, {
+      headers: { 'Content-Type': 'application/json' },
+      ...opts
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch(e) {
+    // Return demo data if backend not running
+    return demoFallback(url, opts);
+  }
+}
+
+// ── DEMO FALLBACK ─────────────────────────────────────────────────────────
+
+const DEMO_LEADS = [
+  { id:'1', name:'Layla Hassan', email:'layla@example.com', phone:'+971 50 000 0001', source:'Email', stage:'New', event_date:'2025-03-15', guest_count:60, message:'We are interested in a private dinner event for about 60 people.', notes:'Came via website', messages:[{id:'m1',timestamp:'2025-01-10T09:00:00',direction:'inbound',channel:'Email',body:'We are interested in a private dinner event for about 60 people.'}], checkin_status:'ID Requested', win_loss:null, created_at:'2025-01-10T09:00:00', updated_at:'2025-01-10T09:00:00' },
+  { id:'2', name:'Omar Khalid', email:'', phone:'+971 50 000 0002', source:'WhatsApp', stage:'Replied', event_date:'', guest_count:'', message:'Hello, do you have availability in April?', notes:'', messages:[], checkin_status:'ID Requested', win_loss:null, created_at:'2025-01-09T14:00:00', updated_at:'2025-01-09T14:00:00' },
+  { id:'3', name:'Nour Al-Rashid', email:'nour@corp.com', phone:'', source:'Instagram', stage:'Qualified', event_date:'2025-04-20', guest_count:25, message:'Looking for a venue for a product launch.', notes:'Budget around $5k', messages:[], checkin_status:'ID Received', win_loss:null, created_at:'2025-01-08T11:00:00', updated_at:'2025-01-11T11:00:00' },
+  { id:'4', name:'Fatima Zahra', email:'fz@hotel.ae', phone:'', source:'Platform Forward', stage:'Won', event_date:'2025-02-10', guest_count:80, message:'Wedding reception inquiry forwarded from Booking.com', notes:'', messages:[], checkin_status:'Ready for Arrival', win_loss:{type:'won',reason:'Value',value:'12500'}, created_at:'2024-12-20T08:00:00', updated_at:'2025-01-05T08:00:00' },
+  { id:'5', name:'Tariq Mansoor', email:'tmansoor@gmail.com', phone:'', source:'Direct Message', stage:'Lost', event_date:'', guest_count:'', message:'Checking rates for a corporate dinner.', notes:'Went with competitor', messages:[], checkin_status:'ID Requested', win_loss:{type:'lost',reason:'Budget'}, created_at:'2024-12-18T10:00:00', updated_at:'2025-01-03T10:00:00' },
+];
+
+function demoFallback(url, opts) {
+  if (url === '/api/meta') return META;
+  if (url === '/api/stats') {
+    const s = { total:5, by_stage:{New:1,Replied:1,Qualified:1,Quoted:0,Won:1,Lost:1}, by_source:{Email:1,Instagram:1,WhatsApp:1,'Platform Forward':1,'Direct Message':1,Other:0}, won:1, lost:1, conversion_rate:20 };
+    return s;
+  }
+  if (url.startsWith('/api/leads/') && !url.includes('/messages')) {
+    const id = url.split('/')[3];
+    return DEMO_LEADS.find(l => l.id === id) || null;
+  }
+  if (url === '/api/leads') return [...DEMO_LEADS];
+  if (url === '/api/notifications') return [];
+  return {};
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────
+
+async function loadDashboard() {
+  const stats = await apiFetch('/api/stats');
+  document.getElementById('stat-total').textContent = stats.total ?? '—';
+  document.getElementById('stat-won').textContent = stats.won ?? '—';
+  document.getElementById('stat-lost').textContent = stats.lost ?? '—';
+  document.getElementById('stat-conv').textContent = (stats.conversion_rate ?? '—') + (stats.conversion_rate !== undefined ? '%' : '');
+
+  // New leads in last 24h
+  const leads = await apiFetch('/api/leads');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const newToday = (Array.isArray(leads) ? leads : []).filter(l => new Date(l.created_at) >= today).length;
+  document.getElementById('stat-new').textContent = newToday;
+
+  // Stage breakdown
+  const sb = document.getElementById('stageBreakdown');
+  const stageColors = {New:'#1d4e89',Replied:'#7d4e00',Qualified:'#b8965a',Quoted:'#4a2d8c',Won:'#2d6a4f',Lost:'#9b2226'};
+  sb.innerHTML = Object.entries(stats.by_stage || {}).map(([s,c]) => `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer;" onclick="navigate('leads')">
+      <div style="width:8px;height:8px;border-radius:50%;background:${stageColors[s]||'#999'};flex-shrink:0;"></div>
+      <span style="font-size:.83rem;flex:1;color:var(--ink-2);">${s}</span>
+      <span style="font-size:.83rem;font-weight:500;color:var(--ink);">${c}</span>
+      <div style="width:60px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
+        <div style="height:100%;background:${stageColors[s]||'#999'};width:${stats.total ? Math.round(c/stats.total*100) : 0}%;border-radius:2px;"></div>
+      </div>
+    </div>`).join('');
+
+  // Source breakdown
+  const srcb = document.getElementById('sourceBreakdown');
+  const srcIcons = {Email:'ri-mail-line',Instagram:'ri-instagram-line',WhatsApp:'ri-whatsapp-line','Platform Forward':'ri-share-forward-line','Direct Message':'ri-message-3-line',Other:'ri-more-line'};
+  srcb.innerHTML = Object.entries(stats.by_source || {}).filter(([,c]) => c > 0).map(([s,c]) => `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <i class="${srcIcons[s]||'ri-link'}" style="font-size:14px;color:var(--ink-3);width:16px;"></i>
+      <span style="font-size:.83rem;flex:1;color:var(--ink-2);">${s}</span>
+      <span style="font-size:.83rem;font-weight:500;color:var(--ink);">${c}</span>
+    </div>`).join('') || '<p style="font-size:.83rem;color:var(--ink-4);">No data yet.</p>';
+
+  // Recent leads
+  const recent = (Array.isArray(leads) ? leads : []).slice(0, 6);
+  const tbody = document.getElementById('recentLeads');
+  if (!recent.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--ink-4);font-size:.84rem;">No leads yet.</td></tr>`;
+  } else {
+    tbody.innerHTML = recent.map(l => `
+      <tr onclick="openDetail('${l.id}')">
+        <td><div class="td-name">${escHtml(l.name)}<div class="sub">${escHtml(l.email||l.phone||'')}</div></div></td>
+        <td><span class="source-badge"><i class="${sourceIcon(l.source)}"></i>${escHtml(l.source)}</span></td>
+        <td>${stageBadge(l.stage)}</td>
+        <td style="color:var(--ink-4);font-size:.78rem;">${relTime(l.updated_at)}</td>
+      </tr>`).join('');
+  }
+}
+
+// ── LEADS ─────────────────────────────────────────────────────────────────
+
+async function loadLeads() {
+  const q = document.getElementById('searchInput').value;
+  const stage = document.getElementById('stageFilter').value;
+  const source = document.getElementById('sourceFilter').value;
+
+  let url = '/api/leads?';
+  if (q) url += `q=${encodeURIComponent(q)}&`;
+  if (stage) url += `stage=${encodeURIComponent(stage)}&`;
+  if (source) url += `source=${encodeURIComponent(source)}&`;
+
+  const leads = await apiFetch(url);
+  const arr = Array.isArray(leads) ? leads : [];
+
+  document.getElementById('leadsCount').textContent = `${arr.length} lead${arr.length !== 1 ? 's' : ''}`;
+
+  const tbody = document.getElementById('leadsTableBody');
+  if (!arr.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="ri-user-search-line"></i><p>No leads found.</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = arr.map(l => `
+    <tr onclick="openDetail('${l.id}')">
+      <td><div class="td-name">${escHtml(l.name)}<div class="sub">${escHtml(l.email||l.phone||'')}</div></div></td>
+      <td><span class="source-badge"><i class="${sourceIcon(l.source)}"></i>${escHtml(l.source)}</span></td>
+      <td>${stageBadge(l.stage)}</td>
+      <td style="font-size:.82rem;color:var(--ink-3);">${l.event_date || '—'}</td>
+      <td style="font-size:.82rem;color:var(--ink-3);">${l.guest_count || '—'}</td>
+      <td style="font-size:.78rem;color:var(--ink-4);">${relTime(l.updated_at)}</td>
+    </tr>`).join('');
+}
+
+// ── PIPELINE ──────────────────────────────────────────────────────────────
+
+async function loadPipeline() {
+  const leads = await apiFetch('/api/leads');
+  const arr = Array.isArray(leads) ? leads : [];
+  const board = document.getElementById('pipelineBoard');
+  board.innerHTML = META.stages.filter(s => !['Won','Lost'].includes(s)).concat(['Won','Lost']).map(stage => {
+    const stageleads = arr.filter(l => l.stage === stage);
+    return `<div class="pipeline-col">
+      <div class="pipeline-col-header">
+        <span class="pipeline-col-title">${stage}</span>
+        <span class="pipeline-col-count">${stageleads.length}</span>
+      </div>
+      <div class="pipeline-cards">
+        ${stageleads.length ? stageleads.map(l => `
+          <div class="pipeline-card" onclick="openDetail('${l.id}')">
+            <div class="pipeline-card-name">${escHtml(l.name)}</div>
+            <div class="pipeline-card-meta">${escHtml(l.source)}${l.event_date ? ' &middot; ' + l.event_date : ''}</div>
+          </div>`).join('') : `<div style="font-size:.78rem;color:var(--ink-4);text-align:center;padding:16px 0;">Empty</div>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── CHECKIN ───────────────────────────────────────────────────────────────
+
+async function loadCheckin() {
+  const q = document.getElementById('checkinSearch').value.toLowerCase();
+  const stage = document.getElementById('checkinStageFilter').value;
+  let leads = await apiFetch('/api/leads');
+  leads = Array.isArray(leads) ? leads : [];
+  if (q) leads = leads.filter(l => l.name.toLowerCase().includes(q) || (l.email||'').toLowerCase().includes(q));
+  if (stage) leads = leads.filter(l => l.checkin_status === stage);
+
+  const tbody = document.getElementById('checkinTable');
+  if (!leads.length) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="ri-id-card-line"></i><p>No guests found.</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = leads.map(l => {
+    const stages = META.checkin_stages;
+    const ci = stages.indexOf(l.checkin_status);
+    return `<tr>
+      <td><div class="td-name">${escHtml(l.name)}<div class="sub">${escHtml(l.email||l.phone||'')}</div></div></td>
+      <td style="font-size:.82rem;color:var(--ink-3);">${l.event_date||'—'}</td>
+      <td>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${stages.map((s,idx) => `
+            <span class="checkin-step ${idx <= ci ? 'done' : ''}" onclick="updateCheckin('${l.id}','${s}')">
+              <i class="${idx <= ci ? 'ri-check-line' : 'ri-time-line'}"></i> ${s}
+            </span>`).join('')}
+        </div>
+      </td>
+      <td><span class="source-badge"><i class="${sourceIcon(l.source)}"></i>${escHtml(l.source)}</span></td>
+      <td><button class="btn btn-outline" style="height:28px;padding:0 10px;font-size:.75rem;" onclick="openDetail('${l.id}')"><i class="ri-eye-line"></i> View</button></td>
+    </tr>`;
+  }).join('');
+}
+
+async function updateCheckin(id, stage) {
+  await apiFetch(`/api/leads/${id}`, { method:'PATCH', body: JSON.stringify({checkin_status: stage}) });
+  toast('Check-in status updated', 'success');
+  loadCheckin();
+}
+
+// ── LEAD DETAIL ───────────────────────────────────────────────────────────
+
+async function openDetail(id) {
+  currentLeadId = id;
+  const lead = await apiFetch(`/api/leads/${id}`);
+  if (!lead || !lead.id) return toast('Lead not found', 'error');
+
+  document.getElementById('detailName').textContent = lead.name;
+  document.getElementById('btnEditLead').onclick = () => {
+    closeModal('detailModal');
+    openEditLeadModal(lead);
+  };
+
+  const stages = META.stages;
+  const ci = stages.indexOf(lead.stage);
+
+  const messages = (lead.messages || []);
+
+  document.getElementById('detailBody').innerHTML = `
+    <!-- Stage track -->
+    <div class="stage-track">
+      ${stages.map((s,i) => `
+        <div class="stage-step ${i < ci ? 'done' : i === ci ? 'current' : ''}" onclick="setStage('${id}','${s}')">
+          <div class="stage-node">${i < ci ? '<i class="ri-check-line" style="font-size:11px;"></i>' : (i+1)}</div>
+          <span class="stage-step-label">${s}</span>
+        </div>`).join('')}
+    </div>
+
+    <!-- Meta -->
+    <div class="detail-meta">
+      <div class="detail-item"><div class="detail-item-label">Email</div><div class="detail-item-value">${escHtml(lead.email||'—')}</div></div>
+      <div class="detail-item"><div class="detail-item-label">Phone</div><div class="detail-item-value">${escHtml(lead.phone||'—')}</div></div>
+      <div class="detail-item"><div class="detail-item-label">Source</div><div class="detail-item-value"><span class="source-badge"><i class="${sourceIcon(lead.source)}"></i>${escHtml(lead.source)}</span></div></div>
+      <div class="detail-item"><div class="detail-item-label">Event Date</div><div class="detail-item-value">${lead.event_date||'—'}</div></div>
+      <div class="detail-item"><div class="detail-item-label">Guests</div><div class="detail-item-value">${lead.guest_count||'—'}</div></div>
+      <div class="detail-item"><div class="detail-item-label">Check-In</div><div class="detail-item-value">${lead.checkin_status||'—'}</div></div>
+    </div>
+
+    ${lead.notes ? `<div class="section-title">Notes</div><p style="font-size:.85rem;color:var(--ink-2);margin-bottom:18px;line-height:1.6;">${escHtml(lead.notes)}</p>` : ''}
+
+    <!-- Messages -->
+    <div class="section-title">Message History</div>
+    <div class="messages-list" id="msgList">
+      ${messages.length ? messages.map(m => `
+        <div>
+          <div class="msg-bubble ${m.direction}">
+            ${escHtml(m.body)}
+            <div class="msg-meta">${m.channel} &middot; ${relTime(m.timestamp)}</div>
+          </div>
+        </div>`).join('') : `<p style="font-size:.82rem;color:var(--ink-4);">No messages recorded.</p>`}
+    </div>
+
+    <!-- Quick reply -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;">
+      <input type="text" class="form-input" id="replyInput" placeholder="Type a reply to log..." style="flex:1;"/>
+      <select class="filter-select" id="replyChannel" style="min-width:110px;">
+        ${META.sources.map(s => `<option>${s}</option>`).join('')}
+      </select>
+      <button class="btn btn-primary" onclick="sendReply('${id}')"><i class="ri-send-plane-line"></i></button>
+    </div>
+
+    <!-- Win / Loss -->
+    ${lead.stage === 'Won' || lead.stage === 'Lost' ? `
+    <div class="section-title">Outcome</div>
+    <div style="background:${lead.stage==='Won'?'var(--green-lt)':'var(--red-lt)'};border:1px solid ${lead.stage==='Won'?'var(--green)':'var(--red)'};border-radius:8px;padding:12px 14px;font-size:.85rem;color:var(--ink-2);margin-bottom:18px;">
+      <strong>${lead.stage}</strong>
+      ${lead.win_loss ? ` &mdash; ${lead.win_loss.reason}${lead.win_loss.value ? ` &mdash; Value: <strong>${lead.win_loss.value}</strong>` : ''}` : ''}
+    </div>` : `
+    <div class="section-title">Close Lead</div>
+    <div class="wl-grid" style="margin-bottom:16px;">
+      <div class="wl-card" id="wl-won" onclick="selectWL('won')">
+        <div class="wl-card-title"><i class="ri-trophy-line" style="color:var(--green);"></i> Mark as Won</div>
+        <select class="form-select" id="wl-won-reason" onclick="event.stopPropagation()" style="font-size:.8rem;padding:6px 8px;height:32px;">
+          ${META.won_reasons.map(r=>`<option>${r}</option>`).join('')}
+        </select>
+        <input type="text" class="form-input" id="wl-won-value" placeholder="Booking value (optional)" onclick="event.stopPropagation()" style="margin-top:8px;font-size:.8rem;height:32px;"/>
+      </div>
+      <div class="wl-card" id="wl-lost" onclick="selectWL('lost')">
+        <div class="wl-card-title"><i class="ri-close-circle-line" style="color:var(--red);"></i> Mark as Lost</div>
+        <select class="form-select" id="wl-lost-reason" onclick="event.stopPropagation()" style="font-size:.8rem;padding:6px 8px;height:32px;">
+          ${META.lost_reasons.map(r=>`<option>${r}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="closeWL('${id}')"><i class="ri-check-line"></i> Save Outcome</button>`}
+  `;
+
+  document.getElementById('detailModal').classList.add('open');
+}
+
+let selectedWL = null;
+function selectWL(type) {
+  selectedWL = type;
+  document.getElementById('wl-won').classList.toggle('selected-won', type === 'won');
+  document.getElementById('wl-lost').classList.toggle('selected-lost', type === 'lost');
+}
+
+async function closeWL(id) {
+  if (!selectedWL) return toast('Select Won or Lost first', 'error');
+  const reason = selectedWL === 'won'
+    ? document.getElementById('wl-won-reason').value
+    : document.getElementById('wl-lost-reason').value;
+  const value = selectedWL === 'won' ? document.getElementById('wl-won-value').value : '';
+
+  await apiFetch(`/api/leads/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ stage: selectedWL === 'won' ? 'Won' : 'Lost', win_loss: { type: selectedWL, reason, value } })
+  });
+  selectedWL = null;
+  toast(`Lead marked as ${selectedWL === 'won' ? 'Won' : 'Lost'}`, 'success');
+  closeModal('detailModal');
+  loadDashboard();
+  loadLeads();
+}
+
+async function setStage(id, stage) {
+  await apiFetch(`/api/leads/${id}`, { method:'PATCH', body: JSON.stringify({stage}) });
+  toast(`Stage updated to ${stage}`, 'success');
+  openDetail(id);
+  loadLeads();
+}
+
+async function sendReply(id) {
+  const body = document.getElementById('replyInput').value.trim();
+  const channel = document.getElementById('replyChannel').value;
+  if (!body) return;
+  await apiFetch(`/api/leads/${id}/messages`, {
+    method: 'POST',
+    body: JSON.stringify({ direction:'outbound', channel, body })
+  });
+  document.getElementById('replyInput').value = '';
+  toast('Reply logged', 'success');
+  openDetail(id);
+}
+
+// ── NEW / EDIT LEAD MODAL ─────────────────────────────────────────────────
+
+function openNewLeadModal() {
+  editingLeadId = null;
+  document.getElementById('leadModalTitle').textContent = 'New Lead';
+  ['name','email','phone','notes','message'].forEach(f => document.getElementById(`f-${f}`).value = '');
+  document.getElementById('f-eventdate').value = '';
+  document.getElementById('f-guestcount').value = '';
+  document.getElementById('leadModal').classList.add('open');
+}
+
+function openEditLeadModal(lead) {
+  editingLeadId = lead.id;
+  document.getElementById('leadModalTitle').textContent = 'Edit Lead';
+  document.getElementById('f-name').value = lead.name || '';
+  document.getElementById('f-email').value = lead.email || '';
+  document.getElementById('f-phone').value = lead.phone || '';
+  document.getElementById('f-source').value = lead.source || '';
+  document.getElementById('f-eventdate').value = lead.event_date || '';
+  document.getElementById('f-guestcount').value = lead.guest_count || '';
+  document.getElementById('f-notes').value = lead.notes || '';
+  document.getElementById('f-message').value = lead.message || '';
+  document.getElementById('leadModal').classList.add('open');
+}
+
+async function saveLead() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { toast('Name is required', 'error'); return; }
+
+  const payload = {
+    name,
+    email: document.getElementById('f-email').value.trim(),
+    phone: document.getElementById('f-phone').value.trim(),
+    source: document.getElementById('f-source').value,
+    event_date: document.getElementById('f-eventdate').value,
+    guest_count: document.getElementById('f-guestcount').value,
+    notes: document.getElementById('f-notes').value.trim(),
+    message: document.getElementById('f-message').value.trim(),
+  };
+
+  if (editingLeadId) {
+    await apiFetch(`/api/leads/${editingLeadId}`, { method:'PATCH', body: JSON.stringify(payload) });
+    toast('Lead updated', 'success');
+  } else {
+    await apiFetch('/api/leads', { method:'POST', body: JSON.stringify(payload) });
+    toast('Lead created', 'success');
+  }
+
+  closeModal('leadModal');
+  loadLeads();
+  loadDashboard();
+  loadNotifications();
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────────────────
+
+async function loadNotifications() {
+  const notifs = await apiFetch('/api/notifications');
+  const arr = Array.isArray(notifs) ? notifs : [];
+  const unread = arr.filter(n => !n.read).length;
+  const badge = document.getElementById('notifBadge');
+  badge.classList.toggle('show', unread > 0);
+
+  const list = document.getElementById('notifList');
+  if (!arr.length) {
+    list.innerHTML = `<div class="notif-empty">No notifications</div>`;
+    return;
+  }
+  list.innerHTML = arr.slice(0,10).map(n => `
+    <div class="notif-item ${n.read ? '' : 'unread'}" onclick="${n.lead_id ? `openDetail('${n.lead_id}');toggleNotifPanel()` : ''}">
+      ${escHtml(n.message)}
+      <div class="notif-time">${relTime(n.timestamp)}</div>
+    </div>`).join('');
+}
+
+function toggleNotifPanel() {
+  notifPanelOpen = !notifPanelOpen;
+  document.getElementById('notifPanel').classList.toggle('open', notifPanelOpen);
+  if (notifPanelOpen) loadNotifications();
+}
+
+async function markNotifsRead() {
+  await apiFetch('/api/notifications/read', { method:'POST', body:'{}' });
+  loadNotifications();
+}
+
+// ── UTILITIES ─────────────────────────────────────────────────────────────
+
+function stageBadge(stage) {
+  const map = {
+    'New':'badge-new','Replied':'badge-replied','Qualified':'badge-qualified',
+    'Quoted':'badge-quoted','Won':'badge-won','Lost':'badge-lost'
+  };
+  return `<span class="badge ${map[stage]||''}">${stage}</span>`;
+}
+
+function sourceIcon(source) {
+  const map = {
+    'Email':'ri-mail-line', 'Instagram':'ri-instagram-line',
+    'WhatsApp':'ri-whatsapp-line', 'Platform Forward':'ri-share-forward-line',
+    'Direct Message':'ri-message-3-line', 'Other':'ri-link'
+  };
+  return map[source] || 'ri-link';
+}
+
+function relTime(iso) {
+  if (!iso) return '—';
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m/60);
+  if (h < 24) return `${h}h ago`;
+  return Math.floor(h/24) + 'd ago';
+}
+
+function escHtml(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  selectedWL = null;
+}
+
+function debounce(fn, ms) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+function toast(msg, type = 'success') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<i class="${type === 'success' ? 'ri-checkbox-circle-line' : 'ri-error-warning-line'}"></i> ${escHtml(msg)}`;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
